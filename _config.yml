@@ -3,3 +3,7 @@ description: "High-Performance Parallel Computing Project"
 url: "https://aoiryo.github.io"
 baseurl: ""
 markdown: kramdown
+kramdown:
+  input: GFM
+  math_engine: mathjax
+  hard_wrap: false
