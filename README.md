@@ -2,11 +2,11 @@
 
 Chuqi Zhang, Likeer Xu
 
-## SUMMARY
+## Summary
 
 This project attacks the two primary bottlenecks in large Transformer models: the $O(N^2)$ attention compute cost and the massive parameter count. We will implement a "hybrid" Transformer block that (1) uses a custom-written Sparse Attention Triton kernel to reduce the attention complexity, and (2) uses Megatron-style Tensor Parallelism (TP) to partition the large (dense) MLP layers across multiple GPU processes. Our focus is on the low-level implementation of the sparse attention operator using the Pythonic Triton language and integrating it with PyTorch's distributed (NCCL) framework.
 
-## BACKGROUND
+## Background
 
 Standard Transformer models (e.g., in CV and NLP) are prohibitively expensive due to two main scaling issues. First, the self-attention mechanism performs a dense $N \times N$ matrix computation (where $N$ is sequence length), which is an $O(N^2)$ bottleneck. Sparse Attention (e.g., Longformer, BigBird) proposes a solution by computing attention only over a sparse, pre-defined subset of token pairs, reducing the complexity to $O(N)$ or $O(N \log N)$.
 
@@ -14,7 +14,7 @@ Second, to achieve state-of-the-art results, the Feed-Forward (MLP) layers of th
 
 Our project will implement a hybrid model that uses both techniques.
 
-## THE CHALLENGE
+## The Challenge
 
 This project presents two distinct and significant parallel systems challenges:
 
@@ -22,7 +22,7 @@ This project presents two distinct and significant parallel systems challenges:
 
 2. **Cross-GPU System Challenge (Megatron TP for MLPs):** The large MLP layers still need to be parallelized. The challenge here is to implement the Megatron-style ColumnParallelLinear and RowParallelLinear modules that manage the distributed computation and synchronized ncclAllReduce communication correctly and efficiently.
 
-## RESOURCES
+## Resources
 
 - **Codebase:** We will start from scratch using Python and PyTorch.
 - **Languages/APIs:**
@@ -34,7 +34,7 @@ This project presents two distinct and significant parallel systems challenges:
   2. Shoeybi, et al. (2019). Megatron-LM: Training Multi-Billion Parameter Language Models.
   3. Child, R., et al. (2019). Generating Long Sequences with Sparse Transformers.
 
-## GOALS AND DELIVERABLES
+## Goals and Deliverables
 
 ### Plan to Achieve (Must-haves for a successful project)
 
@@ -47,7 +47,7 @@ This project presents two distinct and significant parallel systems challenges:
 1. Optimize the Triton kernel: Implement advanced load-balancing techniques (e.g., "binning" or block-level processing) to solve the workload imbalance problem.
 2. **Deliverable:** Generate performance graphs that show two things: (a) The speedup of our custom Sparse Triton kernel vs. a naive PyTorch gather-based sparse implementation, and (b) The scaling performance of our Tensor Parallel MLP block (1 vs. 2 vs. 4 processes).
 
-## PLATFORM CHOICE
+## Platform Choice
 
 This hybrid problem requires a hybrid platform. The chosen platform is ideal because:
 
@@ -55,7 +55,7 @@ This hybrid problem requires a hybrid platform. The chosen platform is ideal bec
 
 2. **PyTorch/NCCL:** We use this for its robust and highly-optimized library for distributed parallelism, which is perfect for the large, dense MLP layers.
 
-## SCHEDULE
+## Schedule
 
 - **Week 1 (Nov 13 - Nov 17):** Finalize proposal.
 - **Week 2 (Nov 18 - Nov 24):**
