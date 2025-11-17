@@ -38,14 +38,51 @@ This project presents two distinct and significant parallel systems challenges:
 
 ### Plan to Achieve (Must-haves for a successful project)
 
-1. Implement a functional Sparse Attention Triton kernel. This kernel will take $Q, K, V$ and a sparse index map as input and produce the correct attention output.
-2. Implement the ColumnParallelLinear and RowParallelLinear modules in PyTorch for the MLP block.
-3. **Deliverable:** A functional, end-to-end "Hybrid Transformer Block" that runs in a 4-process torchrun environment. We will prove correctness by comparing its output to a non-parallel, naive PyTorch implementation.
+1. **Implement Sparse Attention Triton Kernels:**
+   - Develop custom Triton kernels for multiple sparse attention patterns:
+     - Fixed sparse patterns (e.g., block-diagonal, strided)
+     - Local window attention (similar to Longformer)
+     - Random sparse attention patterns
+   - Each kernel will take $Q, K, V$ matrices and a sparse mask/index map as input and produce correct attention output
+   - Validate correctness against dense PyTorch attention implementation
+
+2. **Implement Tensor Parallel MLP Layers:**
+   - Build `ColumnParallelLinear` module that partitions weight matrices column-wise across GPUs
+   - Build `RowParallelLinear` module that partitions weight matrices row-wise with AllReduce synchronization
+   - Support both forward and backward passes with proper gradient handling
+
+3. **End-to-End Integration:**
+   - **Deliverable:** A complete "Hybrid Transformer Block" combining sparse attention and tensor-parallel MLPs
+   - Run successfully in a multi-process environment (4 processes via torchrun)
+   - Demonstrate correctness by comparing outputs with a reference PyTorch implementation
+   - Document the API and usage examples
 
 ### Hope to Achieve (Stretch Goals)
 
-1. Optimize the Triton kernel: Implement advanced load-balancing techniques (e.g., "binning" or block-level processing) to solve the workload imbalance problem.
-2. **Deliverable:** Generate performance graphs that show two things: (a) The speedup of our custom Sparse Triton kernel vs. a naive PyTorch gather-based sparse implementation, and (b) The scaling performance of our Tensor Parallel MLP block (1 vs. 2 vs. 4 processes).
+1. **Advanced Kernel Optimization:**
+   - Implement load-balancing techniques for handling uneven sparsity patterns
+   - Optimize memory access patterns using shared memory tiling
+   - Benchmark different block sizes and thread configurations
+   - **Deliverable:** Performance analysis showing kernel optimization impact (2-5x speedup target)
+
+2. **Comprehensive Performance Analysis:**
+   - **Sparse Attention Benchmarks:**
+     - Compare our Triton kernels vs. naive PyTorch gather/scatter implementations
+     - Test on varying sequence lengths (512, 1024, 2048, 4096 tokens)
+     - Measure speedup across different sparsity levels (50%, 75%, 90% sparse)
+   - **Tensor Parallelism Scaling:**
+     - Strong scaling analysis: fixed model size, varying GPU count (1, 2, 4, 8 GPUs)
+     - Measure communication overhead (AllReduce latency)
+     - Compare with baseline implementations (Data Parallel, Pipeline Parallel)
+   - **Deliverable:** Performance graphs and analysis report demonstrating:
+     - Sparse attention speedup vs. dense attention
+     - Tensor Parallel efficiency and communication costs
+     - Comparison with alternative parallelism strategies
+
+3. **Comparison with Other Parallelism Strategies (if time permits):**
+   - Implement baseline Data Parallel version (DDP) for comparison
+   - Compare memory efficiency: Tensor Parallel vs. Data Parallel vs. Pipeline Parallel
+   - Analyze trade-offs between computation efficiency and communication overhead
 
 ## Platform Choice
 
