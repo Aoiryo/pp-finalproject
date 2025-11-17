@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title | default: site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+      body {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 16px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.6;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 40px;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 2rem;
+      }
+      header .subtitle {
+        color: #666;
+        font-size: 0.95rem;
+      }
+      a {
+        text-decoration: none;
+      }
+      main {
+        margin-top: 20px;
+      }
+      footer {
+        margin-top: 40px;
+        font-size: 0.8rem;
+        color: #999;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>{{ site.title }}</h1>
+        <div class="subtitle">{{ site.description }}</div>
+      </div>
+    </header>
+
+    <main>
+      {{ content }}
+    </main>
+
+    <footer>
+      &copy; {{ site.time | date: "%Y" }} {{ site.title }}
+    </footer>
+  </body>
+</html>
