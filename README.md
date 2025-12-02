@@ -14,6 +14,14 @@ Our project proposal is available here:
 
 ---
 
+## Milestone Report
+
+Our mid-term milestone report is available here:
+
+[📄 Milestone Report (PDF)](MILESTONE.pdf)
+
+---
+
 ## Project Status
 
 Coming soon...

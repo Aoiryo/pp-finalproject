@@ -1,0 +1,1 @@
+pandoc MILESTONE.md -o milestone.html --mathjax --standalone --metadata title="15-618 Project Milestone Report"
